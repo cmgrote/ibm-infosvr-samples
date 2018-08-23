@@ -1,0 +1,10 @@
+---
+
+# Default settings for the Coco Pharmaceuticals samples
+ibm_infosvr_samples_cocopharma_targets:
+  files: /data/files/CocoPharma
+  db_name: COCOPHRM
+  db_location: /data/db/COCOPHRM
+
+# (Relative path to the files used for the samples -- do not change)
+ibm_infosvr_samples_cocopharma_media: cocopharma

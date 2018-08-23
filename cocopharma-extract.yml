@@ -1,0 +1,43 @@
+---
+- name: setup Information Server vars
+  hosts: all
+  tasks:
+    - import_role: name=IBM.infosvr tasks_from=setup_vars.yml
+      tags:
+        - export
+        - import
+
+- name: extract CocoPharma samples
+  hosts:
+    - ibm-information-server-engine
+    - ibm-information-server-domain
+  vars_files:
+    - vars/cocopharma.yml
+  tasks:
+    - import_role:
+        name: IBM.infosvr-import-export
+        tasks_from: export
+      vars:
+        ibm_infosvr_impexp_bg_export:
+          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/bg.xml"
+            categories: "Coco Pharmaceuticals"
+            objects:
+              - type: category
+              - type: term
+        ibm_infosvr_impexp_igc_relns_export:
+          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/dbcol2term.json"
+            type: database_column
+            relationship: assigned_to_terms
+            conditions:
+              - { property: "database_table_or_view.database_schema.database.name", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}" }
+          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/dfcol2term.json"
+            type: data_file_field
+            relationship: assigned_to_terms
+            conditions:
+              - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
+        ibm_infosvr_impexp_ia_export:
+          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
+            project: CocoPharma
+            objects:
+              - type: data_rule_definition
+              - type: data_rule
