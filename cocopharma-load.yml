@@ -152,3 +152,40 @@
           - src: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
             project: CocoPharma
             map: "{{ iaxml_mappings }}"
+
+    - import_role:
+        name: IBM.infosvr-import-export
+        tasks_from: validate
+      vars:
+        ibm_infosvr_impexp_validate:
+          that:
+            - number_of: category
+              meeting_any_conditions:
+                - { property: "parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+              is: 2
+            - number_of: term
+              meeting_all_conditions:
+                - { property: "parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+              is: 51
+            - number_of: database_column
+              meeting_all_conditions:
+                - { property: "database_table_or_view.database_schema.database.name", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}" }
+                - { property: "database_table_or_view.database_schema.database.host.name", operator: "=", value: "{{ groups['ibm-information-server-repo'][0] | upper }}" }
+              is: 63
+            - number_of: database_column
+              meeting_all_conditions:
+                - { property: "database_table_or_view.database_schema.database.name", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}" }
+                - { property: "database_table_or_view.database_schema.database.host.name", operator: "=", value: "{{ groups['ibm-information-server-repo'][0] | upper }}" }
+                - { property: "assigned_to_terms.parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+              is: 61
+            - number_of: data_file_field
+              meeting_all_conditions:
+                - { property: "data_file_record.data_file.host.name", operator: "=", value: "{{ groups['ibm-information-server-engine'][0] | upper }}" }
+                - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
+              is: 63
+            - number_of: data_file_field
+              meeting_all_conditions:
+                - { property: "data_file_record.data_file.host.name", operator: "=", value: "{{ groups['ibm-information-server-engine'][0] | upper }}" }
+                - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
+                - { property: "assigned_to_terms.parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+              is: 61
