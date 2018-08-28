@@ -4,8 +4,7 @@
   tasks:
     - import_role: name=IBM.infosvr tasks_from=setup_vars.yml
       tags:
-        - export
-        - import
+        - always
 
 - name: create Information Server CocoPharma database
   hosts:
@@ -152,6 +151,19 @@
           - src: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
             project: CocoPharma
             map: "{{ iaxml_mappings }}"
+        ibm_infosvr_impexp_workflow_progress:
+          - type: category
+            action: publish
+            comment: "Auto-publication by samples import process"
+            conditions:
+              - { property: "parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+              - { property: "name", operator: "=", value: "Coco Pharmaceuticals" }
+            condition_join: OR
+          - type: term
+            action: publish
+            comment: "Auto-publication by samples import process"
+            conditions:
+              - { property: "parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
 
     - import_role:
         name: IBM.infosvr-import-export
@@ -189,3 +201,5 @@
                 - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
                 - { property: "assigned_to_terms.parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
               is: 61
+      tags:
+        - validate
