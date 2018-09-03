@@ -102,6 +102,28 @@
       failed_when: __db2_load_result.rc != 0 and __db2_load_result.rc != 4
       when: ('ibm-information-server-repo' in group_names)
 
+    - name: check remote database catalog status
+      shell: "source ~/.bashrc && db2 list database directory"
+      args:
+        executable: /bin/bash
+      become_user: "{{ ibm_infosvr_users.db2inst1 }}"
+      become: yes
+      ignore_errors: yes
+      register: __cocopharma_db2catalog_completion
+      changed_when: False
+      when: ('ibm-information-server-engine' in group_names)
+
+    - name: catalog remote data nodes
+      shell: "source ~/.bashrc && db2 {{ item }}"
+      args:
+        executable: /bin/bash
+      with_items:
+        - "catalog database {{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }} at node REPO"
+        - "terminate"
+      become_user: "{{ ibm_infosvr_users.db2inst1 }}"
+      become: yes
+      when: ('ibm-information-server-engine' in group_names) and __cocopharma_db2catalog_completion.stdout.find(ibm_infosvr_samples_cocopharma_targets.db_name) == -1
+
     - import_role: name=IBM.infosvr-metadata-asset-manager
       vars:
         ibm_infosvr_metadata_asset_mgr_import_areas:
