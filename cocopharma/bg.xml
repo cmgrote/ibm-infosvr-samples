@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<glossary xmlns="http://www.ibm.com/is/bg/importexport" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ibm.com/is/bg/importexport BGSchema.xsd" version="1.6" exportTime="1535021325267" ignoreAssignedAssets="true" ignoreLabeledAssets="true" ignoreAssetCollections="true" ignoreStewards="true">
-    <customAttributesDefinitions>
-        </customAttributesDefinitions>
+<glossary xmlns="http://www.ibm.com/is/bg/importexport" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ibm.com/is/bg/importexport BGSchema.xsd" version="1.6" exportTime="1536688084191" ignoreAssignedAssets="true" ignoreLabeledAssets="true" ignoreAssetCollections="true" ignoreStewards="true">
     <categories>
         <category rid="6662c0f2.ee6a64fe.00263pfar.1a0mm9a.lfjd3c.rmgl1cdd5fcd4bijur3g3" name="Coco Pharmaceuticals" shortDescription="This category contains Glossary Terms and Classifications that are related to the Coco Pharmaceuticals data"/>
         <category rid="6662c0f2.ee6a64fe.00263v5kq.vfvo181.0dogg1.qbngmle6tcsbik903jtoh" name="Confidentiality">
@@ -182,4 +180,4 @@
             <parentCategory rid="6662c0f2.ee6a64fe.000mapgrf.s13u7id.1jj22v.o3lqpcd4vrs1vudmdt9ua" identity="Coco Pharmaceuticals::Terms"/>
         </term>
     </terms>
-    </glossary>
+</glossary>

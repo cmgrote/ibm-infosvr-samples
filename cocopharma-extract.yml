@@ -14,30 +14,33 @@
   vars_files:
     - vars/cocopharma.yml
   tasks:
-    - import_role:
-        name: IBM.infosvr-import-export
-        tasks_from: export
+    - import_role: name=IBM.infosvr-import-export
       vars:
-        ibm_infosvr_impexp_bg_export:
-          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/bg.xml"
-            categories: "Coco Pharmaceuticals"
-            objects:
-              - type: category
-              - type: term
-        ibm_infosvr_impexp_igc_relns_export:
-          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/dbcol2term.json"
-            type: database_column
-            relationship: assigned_to_terms
-            conditions:
-              - { property: "database_table_or_view.database_schema.database.name", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}" }
-          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/dfcol2term.json"
-            type: data_file_field
-            relationship: assigned_to_terms
-            conditions:
-              - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
-        ibm_infosvr_impexp_ia_export:
-          - dest: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
-            project: CocoPharma
-            objects:
-              - type: data_rule_definition
-              - type: data_rule
+        export:
+          glossary:
+            - into: "{{ ibm_infosvr_samples_cocopharma_media }}/bg.xml"
+              limited_to_categories: "Coco Pharmaceuticals"
+              including_objects:
+                - type: category
+                - type: term
+          relationships:
+            - into: "{{ ibm_infosvr_samples_cocopharma_media }}/dbcol2term.json"
+              from_type: database_column
+              via_properties:
+                - assigned_to_terms
+              limited_to:
+                only_with_conditions:
+                  - { property: "database_table_or_view.database_schema.database.name", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}" }
+            - into: "{{ ibm_infosvr_samples_cocopharma_media }}/dfcol2term.json"
+              from_type: data_file_field
+              via_properties:
+                - assigned_to_terms
+              limited_to:
+                only_with_conditions:
+                  - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
+          infoanalyzer:
+            - into: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
+              from_project: CocoPharma
+              including_objects:
+                - type: data_rule_definition
+                - type: data_rule

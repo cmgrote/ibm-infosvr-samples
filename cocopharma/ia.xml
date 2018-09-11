@@ -3,84 +3,84 @@
   <DataSources>
     <DataSource host="DB.INFOSVR.VAGRANT.IBM.COM" name="COCOPHRM">
       <Schema name="DB2INST1">
-        <Table name="EMPLOYEE">
-          <Column name="LVL"/>
-          <Column name="PNUM"/>
-          <Column name="LNAME"/>
-          <Column name="LOCCODE"/>
-          <Column name="EMPSTATUS"/>
-          <Column name="ROLE"/>
-          <Column name="DEPT"/>
-          <Column name="FNAME"/>
-        </Table>
-        <Table name="CONTACTPHONE">
-          <Column name="RECID"/>
-          <Column name="CONTACTTYPE"/>
-          <Column name="NUMBER"/>
-        </Table>
-        <Table name="CONTACTLIST">
-          <Column name="FIRSTNAME"/>
-          <Column name="CONTACTTYPE"/>
-          <Column name="JOBTITLE"/>
-          <Column name="RECID"/>
-          <Column name="COMPANY"/>
-          <Column name="LASTNAME"/>
-          <Column name="WORKLOCATION"/>
-        </Table>
-        <Table name="EMPSALARYANALYSIS">
-          <Column name="TAX"/>
-          <Column name="CITY"/>
-          <Column name="HDR"/>
-          <Column name="RECTYPE"/>
-          <Column name="HOL"/>
-          <Column name="DEPT"/>
-          <Column name="LOCATION"/>
-          <Column name="ROLE"/>
-          <Column name="SALARY"/>
-          <Column name="EMPSTATUS"/>
-          <Column name="SERVICE"/>
-          <Column name="TAXP"/>
-          <Column name="LVL"/>
-          <Column name="PNUM"/>
-          <Column name="SNUM"/>
-          <Column name="FNAME"/>
-          <Column name="LNAME"/>
-          <Column name="STREET"/>
-          <Column name="LOCCODE"/>
-          <Column name="ETYPE"/>
-          <Column name="STATE"/>
-          <Column name="BONUS"/>
-        </Table>
-        <Table name="WORKLOCATION">
-          <Column name="WLID"/>
-          <Column name="ADDR7"/>
-          <Column name="ADDR4"/>
-          <Column name="ADDR1"/>
-          <Column name="WLNAME"/>
-          <Column name="ADDR2"/>
-          <Column name="ADDR3"/>
-          <Column name="ADDR5"/>
-          <Column name="ADDR6"/>
-        </Table>
         <Table name="DEPT">
-          <Column name="MANAGER"/>
           <Column name="DEPNAME"/>
+          <Column name="MANAGER"/>
           <Column name="DEPCODE"/>
         </Table>
+        <Table name="EMPLOYEE">
+          <Column name="DEPT"/>
+          <Column name="ROLE"/>
+          <Column name="LOCCODE"/>
+          <Column name="EMPSTATUS"/>
+          <Column name="LNAME"/>
+          <Column name="LVL"/>
+          <Column name="FNAME"/>
+          <Column name="PNUM"/>
+        </Table>
+        <Table name="WORKLOCATION">
+          <Column name="ADDR6"/>
+          <Column name="ADDR7"/>
+          <Column name="WLNAME"/>
+          <Column name="ADDR1"/>
+          <Column name="ADDR3"/>
+          <Column name="WLID"/>
+          <Column name="ADDR5"/>
+          <Column name="ADDR2"/>
+          <Column name="ADDR4"/>
+        </Table>
+        <Table name="CONTACTLIST">
+          <Column name="JOBTITLE"/>
+          <Column name="LASTNAME"/>
+          <Column name="WORKLOCATION"/>
+          <Column name="COMPANY"/>
+          <Column name="FIRSTNAME"/>
+          <Column name="RECID"/>
+          <Column name="CONTACTTYPE"/>
+        </Table>
+        <Table name="CONTACTPHONE">
+          <Column name="CONTACTTYPE"/>
+          <Column name="NUMBER"/>
+          <Column name="RECID"/>
+        </Table>
         <Table name="CONTACTEMAIL">
-          <Column name="EMAIL"/>
-          <Column name="ETYPE"/>
           <Column name="REDIF"/>
+          <Column name="ETYPE"/>
+          <Column name="EMAIL"/>
         </Table>
         <Table name="PATIENTTABLE">
+          <Column name="LH_ADDR_3"/>
+          <Column name="TRIAL"/>
           <Column name="LH_ADDR_5"/>
           <Column name="LH_ADDR_2"/>
           <Column name="LH_ADDR_4"/>
-          <Column name="LH_ADDR_1"/>
-          <Column name="PATIENT"/>
-          <Column name="LH_ADDR_3"/>
           <Column name="PATIENTID"/>
-          <Column name="TRIAL"/>
+          <Column name="PATIENT"/>
+          <Column name="LH_ADDR_1"/>
+        </Table>
+        <Table name="EMPSALARYANALYSIS">
+          <Column name="ETYPE"/>
+          <Column name="STATE"/>
+          <Column name="HOL"/>
+          <Column name="EMPSTATUS"/>
+          <Column name="SERVICE"/>
+          <Column name="PNUM"/>
+          <Column name="FNAME"/>
+          <Column name="HDR"/>
+          <Column name="LNAME"/>
+          <Column name="LOCCODE"/>
+          <Column name="SNUM"/>
+          <Column name="DEPT"/>
+          <Column name="BONUS"/>
+          <Column name="RECTYPE"/>
+          <Column name="TAXP"/>
+          <Column name="LOCATION"/>
+          <Column name="ROLE"/>
+          <Column name="LVL"/>
+          <Column name="STREET"/>
+          <Column name="CITY"/>
+          <Column name="SALARY"/>
+          <Column name="TAX"/>
         </Table>
       </Schema>
     </DataSource>
