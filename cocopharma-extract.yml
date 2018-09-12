@@ -43,4 +43,6 @@
               from_project: CocoPharma
               including_objects:
                 - type: data_rule_definition
+                - type: data_rule_set_definition
                 - type: data_rule
+                - type: data_rule_set
