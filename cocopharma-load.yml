@@ -112,7 +112,7 @@
       register: __cocopharma_db2catalog_completion
       changed_when: False
       when: ('ibm-information-server-engine' in group_names)
-
+    
     - name: catalog remote data nodes
       shell: "source ~/.bashrc && db2 {{ item }}"
       args:
@@ -151,47 +151,42 @@
             hostname: "{{ groups['ibm-information-server-repo'][0] | upper }}"
             database_name: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}"
 
-    - import_role:
-        name: IBM.infosvr-import-export
-        tasks_from: import
+    - import_role: name=IBM.infosvr-import-export
       vars:
-        ibm_infosvr_impexp_bg_import:
-          - src: "{{ ibm_infosvr_samples_cocopharma_media }}/bg.xml"
-            merge: overwrite
-        ibm_infosvr_impexp_igc_relns_import:
-          - src: "{{ ibm_infosvr_samples_cocopharma_media }}/dbcol2term.json"
-            type: database_column
-            relationship: assigned_to_terms
-            map: "{{ rest_mappings }}"
-            mode: REPLACE_ALL
-          - src: "{{ ibm_infosvr_samples_cocopharma_media }}/dfcol2term.json"
-            type: data_file_field
-            relationship: assigned_to_terms
-            map: "{{ rest_mappings }}"
-            mode: REPLACE_ALL
-        ibm_infosvr_impexp_ia_import:
-          - src: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
-            project: CocoPharma
-            map: "{{ iaxml_mappings }}"
-        ibm_infosvr_impexp_workflow_progress:
-          - type: category
-            action: publish
-            comment: "Auto-publication by samples import process"
-            conditions:
-              - { property: "parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
-              - { property: "name", operator: "=", value: "Coco Pharmaceuticals" }
-            condition_join: OR
-          - type: term
-            action: publish
-            comment: "Auto-publication by samples import process"
-            conditions:
-              - { property: "parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
-
-    - import_role:
-        name: IBM.infosvr-import-export
-        tasks_from: validate
-      vars:
-        ibm_infosvr_impexp_validate:
+        ingest:
+          glossary:
+            - from: "{{ ibm_infosvr_samples_cocopharma_media }}/bg.xml"
+              merged_by: overwrite
+          relationships:
+            - from: "{{ ibm_infosvr_samples_cocopharma_media }}/dbcol2term.json"
+              using_mode: REPLACE_ALL
+              with_options:
+                transformed_by: "{{ rest_mappings }}"
+            - from: "{{ ibm_infosvr_samples_cocopharma_media }}/dfcol2term.json"
+              using_mode: REPLACE_ALL
+              with_options:
+                transformed_by: "{{ rest_mappings }}"
+          infoanalyzer:
+            - from: "{{ ibm_infosvr_samples_cocopharma_media }}/ia.xml"
+              into_project: CocoPharma
+              with_options:
+                transformed_by: "{{ iaxml_mappings }}"
+        progress:
+          - assets_of_type: category
+            using_action: publish
+            with_options:
+              only_with_conditions:
+                - { property: "parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+                - { property: "name", operator: "=", value: "Coco Pharmaceuticals" }
+              condition_join: OR
+              with_comment: "Auto-publication by samples import process"
+          - assets_of_type: term
+            using_action: publish
+            with_options:
+              only_with_conditions:
+                - { property: "parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
+              with_comment: "Auto-publication by samples import process"
+        validate:
           that:
             - number_of: category
               meeting_any_conditions:
@@ -223,5 +218,3 @@
                 - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
                 - { property: "assigned_to_terms.parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
               is: 61
-      tags:
-        - validate
