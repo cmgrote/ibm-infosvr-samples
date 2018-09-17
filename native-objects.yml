@@ -1,0 +1,61 @@
+---
+- name: setup Information Server vars
+  hosts: all
+  tasks:
+    - import_role: name=IBM.infosvr tasks_from=setup_vars.yml
+      tags:
+        - always
+
+- name: load Information Server native objects
+  hosts:
+    - ibm-information-server-engine
+    - ibm-information-server-domain
+    - ibm-information-server-repo
+  tasks:
+    - debug:
+        var: __ibm_infosvr_version
+        verbosity: 1
+    - import_role: name=IBM.infosvr-metadata-asset-manager
+      vars:
+        ibm_infosvr_metadata_asset_mgr_import_areas:
+          - name: InfoSvr_Views
+            type: DB2Connector
+            description: "Import area for Information Server SQL views"
+            metadata_interchange_server: "{{ groups['ibm-information-server-engine'][0] | lower }}"
+            dcn:
+              name: InfoSvr_Views
+              description: "Information Server SQL views connection"
+              database: XMETA
+              username: "{{ ibm_infosvr_users.xmeta }}"
+              password: "{{ ibm_infosvr_upwds.xmeta }}"
+            assets_to_import:
+              - schema[XMETA|CEFVIEWS]
+              - schema[XMETA|CMVIEWS]
+              - schema[XMETA|IAVIEWS]
+              - schema[XMETA|IGVIEWS]
+              - schema[XMETA|REMVIEWS]
+              - schema[XMETA|XMDFLTVIEWS]
+            hostname: "{{ groups['ibm-information-server-repo'][0] | upper }}"
+      when: __ibm_infosvr_version == '11.7'
+
+    - import_role: name=IBM.infosvr-metadata-asset-manager
+      vars:
+        ibm_infosvr_metadata_asset_mgr_import_areas:
+          - name: InfoSvr_Views
+            type: DB2Connector
+            description: "Import area for Information Server SQL views"
+            metadata_interchange_server: "{{ groups['ibm-information-server-engine'][0] | lower }}"
+            dcn:
+              name: InfoSvr_Views
+              description: "Information Server SQL views connection"
+              database: XMETA
+              username: "{{ ibm_infosvr_users.xmeta }}"
+              password: "{{ ibm_infosvr_upwds.xmeta }}"
+            assets_to_import:
+              - schema[XMETA|CEFVIEWS]
+              - schema[XMETA|CMVIEWS]
+              - schema[XMETA|IAVIEWS]
+              - schema[XMETA|IGVIEWS]
+              - schema[XMETA|REMVIEWS]
+            hostname: "{{ groups['ibm-information-server-repo'][0] | upper }}"
+      when: __ibm_infosvr_version == '11.5'
