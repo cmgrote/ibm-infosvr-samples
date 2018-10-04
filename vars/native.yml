@@ -1,0 +1,224 @@
+---
+###
+# Copyright 2018 IBM Corp. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#      http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+###
+
+# Details:
+# - https://www.ibm.com/support/knowledgecenter/en/SSZJPZ_11.7.0/com.ibm.swg.im.iis.found.admin.common.doc/topics/c_wdisad_Roles.html
+ibm_infosvr_roles:
+  - id: CMAdmin
+    name: Common Metadata Administrator
+    description: |
+      On the Administration tab, this user can perform the following tasks:
+      - Specify import policies
+      - Configure metadata interchange servers
+      - On the Import tab, this user has all the privileges of the Common Metadata Importer. In addition, this user can view, work in, and delete import areas that are created by any user.
+      On the Repository Management tab, this user can perform the following tasks:
+      - Export databases and database schemas
+      - Merge and delete assets
+      - Delete data connections
+      - Set implementation relationships
+      - Browse, search for, and inspect assets that are in the metadata repository
+      - Edit and delete notes
+      - Edit the long description, short description, and steward fields for selected assets
+      The Common Metadata Administrator can also use the istool command line to import or delete common metadata.
+  - id: CMImporter
+    name: Common Metadata Importer
+    description: |
+      On the Import tab, this user can perform the following tasks:
+      - Create import areas
+      - Import metadata to the staging area
+      - Work with staged imports that this user creates, including analyzing, previewing, reimporting, and sharing imports to the metadata repository
+      - View, work in, and delete only those import areas that this user creates
+      - Create and edit data connections.
+      On the Repository Management tab, this user can browse, search for, and inspect assets that are in the metadata repository.
+      Authors need this role if they want to import metadata into the metadata repository by using InfoSphere Metadata Asset Manager.
+  - id: CMUser
+    name: Common Metadata User
+    description: |
+      This user can access the Repository Management tab to browse, search for, and inspect assets that are in the metadata repository.
+      Users need this role if they want to browse, search for, and inspect assets that are in the metadata repository
+  - id: DataPreviewUser
+    name: Data Preview Service User
+  - id: SuiteAdmin
+    name: Suite Administrator
+    description: |
+      Select to give InfoSphere Information Server administration privileges to the user.
+      The Suite Administrator role includes additional permissions; however, the Suite User role must also be assigned to the user for it to authenticate.
+      Provides maximum administration privileges throughout the suite.
+      Administrators need this role to create InfoSphere Data Click users and grant them the roles they need to use InfoSphere Data Click.
+  - id: SuiteUser
+    name: Suite User
+    description: |
+      Select to give the user general access to InfoSphere Information Server and the suite components.
+      A user must have this role to authenticate with InfoSphere Information Server or any of the suite components.
+      Provides access to the suite and to suite components.
+      If you assign a user the role of suite administrator and not that of suite user, the user cannot log on to any of the suite tools or component tools.
+      This role is the default role.
+      Authors need this role before they can create and run activities in InfoSphere Data Click.
+      Users need this role before they can run activities in InfoSphere Data Click.
+  - id: DCAuthor
+    name: Data Click Author
+    description: |
+      The Data Click Author role allows an enterprise architect to create data movement flows that Data Click Users can run.
+      This controls the data that users can move into target assets.
+  - id: DCUser
+    name: Data Click User
+    description: |
+      The Data Click User is a user who can select assets from within the data sources that the Data Click Author specified, and then move that set of data based on the policies that were defined by the Author.
+  - id: DataStageAdmin
+    name: DataStage and QualityStage Administrator
+    description: |
+      Can perform the following tasks:
+      - Assign project roles to InfoSphere DataStage suite users in the InfoSphere DataStage Administrator client
+      - Use the Administrator client to create, delete, and configure projects
+      - Mark projects as protected
+      - Unprotect protected projects
+      - Issue server engine commands
+      - Use the Designer client to create and edit jobs and other objects
+      - Use the Director client to run and schedule jobs
+      - View the entire job log messages
+      - Import objects into protected projects
+      - Change the work load manager (WLM) settings for InfoSphere Data Click
+      With this role, the user cannot edit jobs or other objects in protected projects.
+      Administrators need this role if they want to:
+      - Change the workload manager settings for InfoSphere Data Click
+      - Assign InfoSphere Data Click authors the DataStage Developer role
+      - Assign InfoSphere Data Click users the DataStage Operator role
+      - Import InfoSphere Data Click job templates into the InfoSphere DataStage projects
+  - id: DataStageUser
+    name: DataStage and QualityStage User
+    description: |
+      Provides access to InfoSphere DataStage and InfoSphere QualityStage.
+      Additionally, this role is used to filter the lists of users and groups that are shown in the InfoSphere DataStage Administrator client.
+      If an IBM InfoSphere Information Server user does not have this role, that user cannot access any of the InfoSphere DataStage or InfoSphere QualityStage product modules, even if that user has InfoSphere DataStage or InfoSphere QualityStage project roles assigned to the user name.
+      Authors need the DataStage and QualityStage User role to run InfoSphere Data Click activities.
+      Users need this role to run activities in InfoSphere Data Click.
+  - id: EMAdmin
+    name: Exception Management Administrator
+  - id: EMBusinessSteward
+    name: Exception Management Business Steward
+  - id: EMDataSteward
+    name: Exception Management Data Steward
+  - id: EMStewardManager
+    name: Exception Management Steward Manager
+  - id: FastTrackAdministrator
+    name: FastTrack Project Administrator
+    description: |
+      The InfoSphere FastTrack Project Administrator can create and manage projects, and manage user and group access to projects.
+  - id: FastTrackUser
+    name: FastTrack User
+    description: |
+      An InfoSphere FastTrack User can use InfoSphere FastTrack functions.
+      Users must be authorized to projects before they can use functions for creating, managing, and viewing mapping specifications.
+  - id: ISDAdministrator
+    name: ISD Administrator
+    description: |
+      Provides access to all of the InfoSphere Information Services Director functions.
+  - id: ISDConsumer
+    name: ISD Consumer
+    description: |
+      Provides ability to invoke secured services.
+  - id: ISDOperator
+    name: ISD Operator
+    description: |
+      Provides access to the InfoSphere Information Services Director runtime functions.
+      An operator can add and remove providers as well as configure runtime parameters of a deployed application, service and operation.
+      In addition, an operator can deploy applications from the design time view.
+  - id: ISDUser
+    name: ISD User
+    description: |
+      Provides access to view a list of applications in the runtime environment.
+      This user can browse deployed applications, services, operations, and providers.
+  - id: SorcererDataAdmin
+    name: Information Analyzer Data Administrator
+    description: |
+      Can modify analysis settings and add or modify system sources.
+  - id: SorcererAdmin
+    name: Information Analyzer Project Administrator
+    description: |
+      Can administer projects including creating, deleting, and modifying information analysis projects.
+      After data sources are imported by using InfoSphere Metadata Asset Manager, users with this role can add the data sources to specific projects in InfoSphere Information Analyzer.
+      Only users with this role can view all projects and can add data sources to projects and workspaces.
+      In the InfoSphere Information Analyzer thin client, the project administrator must also be added as a user to all workspaces that they want to work with.
+  - id: SorcererUser
+    name: Information Analyzer User
+    description: |
+      Can log on to InfoSphere Information Analyzer, view the dashboard, and open a project.
+  - id: GlossaryAdmin
+    name: Information Governance Catalog Glossary Administrator
+    description: |
+      The Information Governance Catalog Glossary Administrator role is the most privileged role.
+      Users with the Information Governance Catalog Glossary Administrator role can set up and administer the glossary so that other users can find and analyze the information they need.
+      Most administrative tasks can be accessed from the Administration tab.
+  - id: GlossaryAuthor
+    name: Information Governance Catalog Glossary Author
+    description: |
+      Users with the Information Governance Catalog Glossary Author role can create and edit glossary assets.
+      This role is often assigned to users who will be assigned as stewards.
+      If workflow is enabled, a user with the Information Governance Catalog Glossary Author security role can be assigned the Editor, Reviewer, Approver, or Publisher workflow roles.
+  - id: GlossaryBasicUser
+    name: Information Governance Catalog Glossary Basic User
+    description: |
+      Users with the Information Governance Catalog Glossary Basic User role can view the terms, categories, and stewards in the glossary, but information about other types of catalog assets is not available to them.
+      Users with the Information Governance Catalog Glossary Basic User role cannot view information governance policies or information governance rules.
+      By excluding access to other types of assets, users who do not need to know about the relationship of terms and categories to other assets are not presented with unnecessary information.
+      For example, the assets that are assigned to terms are not shown in the display of term details to users with the Information Governance Catalog Glossary Basic User role.
+      In addition, when users with this role search for assets, they can search only for terms and categories, and not other kinds of assets.
+      Finally, some views that are available to other user roles are not available.
+      For example, Information Governance Catalog Glossary Basic User cannot view the data source tree or run business lineage reports.
+      Information Governance Catalog Glossary Basic Users cannot be assigned to any workflow roles.
+      The Information Governance Catalog Glossary Basic User role is the least privileged role for glossary assets.
+  - id: MDWAdministrator
+    name: Information Governance Catalog Information Asset Administrator
+    description: |
+      Users with the Information Governance Catalog Information Asset Administrator must be familiar with the enterprise metadata and metadata that is imported into the catalog.
+      The administrator must also be familiar with the metadata that is used in jobs.
+  - id: GlossaryAssigner
+    name: Information Governance Catalog Information Asset Assigner
+    description: |
+      The Information Governance Catalog Information Asset Assigner is a security role that is designed for users of other products within the InfoSphere Information Server suite.
+      Some of these products include features that enable users to interact with glossary content directly from the other product, without requiring the user to log in to InfoSphere Information Governance Catalog.
+      If users of such a product are assigned the Information Governance Catalog Information Asset Assigner role, they can assign assets to terms from within the interface of the other product.
+      For example, users of IBM InfoSphere Information Analyzer can assign assets to terms and categories.
+      As another example, users with this security role can work with IBM InfoSphere Information Governance Catalog for Eclipse.
+      In addition to the ability to assign assets, users with the Information Governance Catalog Information Asset Assigner role can also perform the same tasks as users who have the Information Governance Catalog User role if they have direct access to InfoSphere Information Governance Catalog.
+      Information Governance Catalog Information Asset Assigners cannot have any workflow roles assigned to them.
+  - id: MDWUser
+    name: Information Governance Catalog Information Asset Author
+    description: |
+      Users with this security role can work with queries, browse and search information assets, make assignments to information assets, and run lineage reports.
+  - id: GlossaryUser
+    name: Information Governance Catalog User
+    description: |
+      Users with the Information Governance Catalog User role can view terms, categories, information governance policies, information governance rules, and stewards in the glossary, including details of the assets that are assigned to terms and information governance rules.
+      If workflow is enabled, a user with the Information Governance Catalog User security role can be assigned the Reviewer or Approver workflow roles.
+  - id: RulesAdministrator
+    name: Rules Administrator
+    description: |
+      Sets up and administers who can access and run data rules and rule sets, so that other users can find and run data rules and rule sets for projects.
+  - id: RulesAuthor
+    name: Rules Author
+    description: |
+      Provides the ability to author data rule definitions and rule set definitions.
+  - id: RulesManager
+    name: Rules Manager
+    description: |
+      Manages the creation and organization of data rules and rule sets.
+      This role manages who can create data rule definitions, rule set definitions, and metrics, as well as who can run data rules, rule sets, and metrics.
+  - id: RulesUser
+    name: Rules User
+    description: |
+      Provides the ability to run data rules and rule sets.

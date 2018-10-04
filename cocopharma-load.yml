@@ -1,4 +1,20 @@
 ---
+###
+# Copyright 2018 IBM Corp. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#      http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+###
+
 - name: setup Information Server vars
   hosts: all
   tasks:
@@ -218,3 +234,141 @@
                 - { property: "data_file_record.data_file.path", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.files }}" }
                 - { property: "assigned_to_terms.parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
               is: 61
+
+- name: create CocoPharma users
+  hosts:
+    - ibm-information-server-engine
+  vars_files:
+    - vars/native.yml
+    - vars/cocopharma_users.yml
+  tasks:
+    - name: list groups
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -list GROUPS
+      args:
+        executable: /bin/bash
+      when: ibm_infosvr_samples_cocopharma_groups is defined
+      register: __cocopharma_existing_groups
+
+    - name: create groups
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -add_group '{{ item.id }}~{{ item.name }}'
+      args:
+        executable: /bin/bash
+      when: >
+        __cocopharma_existing_groups is defined
+        and __cocopharma_existing_groups.stdout.find(item.id) == -1
+      with_items: "{{ ibm_infosvr_samples_cocopharma_groups }}"
+      loop_control:
+        label: "{{ item.id }}"
+
+    - name: reset roles on groups to none
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -remove_group_roles '{{ item.id }}${{ ibm_infosvr_roles | json_query('[].id') | join("~") }}'
+      args:
+        executable: /bin/bash
+      with_items: "{{ ibm_infosvr_samples_cocopharma_groups }}"
+      when: ibm_infosvr_samples_cocopharma_groups is defined
+      loop_control:
+        label: "{{ item.id }}"
+
+    - name: assign roles to groups
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -assign_group_roles '{{ item.id }}${{ item.roles | join("~") }}'
+      args:
+        executable: /bin/bash
+      with_items: "{{ ibm_infosvr_samples_cocopharma_groups }}"
+      when: ibm_infosvr_samples_cocopharma_groups is defined
+      loop_control:
+        label: "{{ item.id }}"
+
+    - name: list users
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -list USERS
+      args:
+        executable: /bin/bash
+      when: ibm_infosvr_samples_cocopharma_groups is defined
+      register: __cocopharma_existing_users
+
+    - name: create users
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -add_user '{{ item.username }}~{{ item.password }}~{{ item.firstname }}~{{ item.lastname }}~{{ item.title }}~{{ item.jobtitle }}~~~~~~~~{{ item.email }}'
+      args:
+        executable: /bin/bash
+      when: >
+        __cocopharma_existing_users is defined
+        and __cocopharma_existing_users.stdout.find(item.username) == -1
+      with_items: "{{ ibm_infosvr_samples_cocopharma_users }}"
+      loop_control:
+        label: "{{ item.username }}"
+
+    - name: assign users to groups
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -add_users_group '{{ item.username }}${{ item.groups | join("~") }}'
+      args:
+        executable: /bin/bash
+      with_items: "{{ ibm_infosvr_samples_cocopharma_users }}"
+      when: ibm_infosvr_samples_cocopharma_users is defined
+      loop_control:
+        label: "{{ item.username }}"
+
+    - name: get RIDs for users
+      uri:
+        url: "https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}/ibm/iis/igc-rest/v1/search/"
+        method: POST
+        user: "{{ ibm_infosvr_users.isadmin }}"
+        password: "{{ ibm_infosvr_upwds.isadmin }}"
+        body: '{"properties":["principal_id"],"types":["user"],"pageSize":"1000"}'
+        body_format: json
+        validate_certs: no
+        status_code: 200
+        headers:
+          Content-Type: "application/json"
+      changed_when: False
+      register: __cocopharma_existing_users_rids
+
+    - name: add users as stewards
+      uri:
+        url: "https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}/ibm/iis/igc-rest/v1/administration/stewards"
+        method: POST
+        user: "{{ ibm_infosvr_users.isadmin }}"
+        password: "{{ ibm_infosvr_upwds.isadmin }}"
+        body: >
+                {"id":"{{ __cocopharma_existing_users_rids.json | json_query("items[?principal_id=='" + item.username + "']._id") | first }}"}
+        body_format: json
+        validate_certs: no
+        status_code: 200
+        headers:
+          Content-Type: "application/json"
+      with_items: "{{ ibm_infosvr_samples_cocopharma_users }}"
+      when: ibm_infosvr_samples_cocopharma_users is defined
+      loop_control:
+        label: "{{ item.username }}"
