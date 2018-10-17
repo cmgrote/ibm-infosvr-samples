@@ -14,8 +14,6 @@
 # limitations under the License.
 ###
 
-connect to {{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}$
-
 DROP TABLE ContactEmail$
 CREATE TABLE ContactEmail (
   RedIf INT NOT NULL,
