@@ -236,6 +236,22 @@
                 - { property: "assigned_to_terms.parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
               is: 61
 
+    - import_role: name=IBM.infosvr-metadata-asset-manager
+      vars:
+        ibm_infosvr_metadata_asset_mgr_discover_sources:
+          - dcn: CocoPharma_DB2
+            project: CocoPharma
+            target_host: "{{ groups['ibm-information-server-repo'][0] | upper }}"
+            steps:
+              - import
+              - columnAnalysis
+              - termAssignment
+              - dataQualityAnalysis
+              - publish
+            parameters:
+              rootAssets: schema[{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}|{{ ibm_infosvr_users.db2inst1 | upper }}]
+              Asset_description_already_exists: Replace_existing_description
+
 - name: create CocoPharma users
   hosts:
     - ibm-information-server-engine
