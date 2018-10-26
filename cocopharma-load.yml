@@ -244,6 +244,8 @@
   any_errors_fatal: true
   roles:
     - IBM.infosvr-metadata-asset-manager
+  vars_files:
+    - vars/cocopharma.yml
   vars:
     ibm_infosvr_metadata_asset_mgr_discover_sources:
       - dcn: CocoPharma_DB2
