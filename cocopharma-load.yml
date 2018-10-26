@@ -281,15 +281,13 @@
       when: ibm_infosvr_samples_cocopharma_groups is defined
       register: __cocopharma_existing_groups
 
-    - name: create groups
-      shell: >
-          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
-          -user {{ ibm_infosvr_users.isadmin }}
-          -password {{ ibm_infosvr_upwds.isadmin }}
-          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
-          -add_group '{{ item.id }}~{{ item.name }}'
-      args:
-        executable: /bin/bash
+    - name: add group creation to command-list
+      lineinfile:
+        path: /tmp/__cocopharma_users_command_list.x
+        regexp: ^-add_group '{{ item.id }}
+        line: -add_group '{{ item.id }}~{{ item.name }}'
+        state: present
+        insertafter: EOF
       when: >
         __cocopharma_existing_groups is defined
         and __cocopharma_existing_groups.stdout.find(item.id) == -1
@@ -297,29 +295,25 @@
       loop_control:
         label: "{{ item.id }}"
 
-    - name: reset roles on groups to none
-      shell: >
-          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
-          -user {{ ibm_infosvr_users.isadmin }}
-          -password {{ ibm_infosvr_upwds.isadmin }}
-          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
-          -remove_group_roles '{{ item.id }}${{ ibm_infosvr_roles | json_query('[].id') | join("~") }}'
-      args:
-        executable: /bin/bash
+    - name: add group role reset to command-list
+      lineinfile:
+        path: /tmp/__cocopharma_users_command_list.x
+        regexp: ^-remove_group_roles '{{ item.id }}
+        line: -remove_group_roles '{{ item.id }}${{ ibm_infosvr_roles | json_query('[].id') | join("~") }}'
+        state: present
+        insertafter: EOF
       with_items: "{{ ibm_infosvr_samples_cocopharma_groups }}"
       when: ibm_infosvr_samples_cocopharma_groups is defined
       loop_control:
         label: "{{ item.id }}"
 
-    - name: assign roles to groups
-      shell: >
-          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
-          -user {{ ibm_infosvr_users.isadmin }}
-          -password {{ ibm_infosvr_upwds.isadmin }}
-          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
-          -assign_group_roles '{{ item.id }}${{ item.roles | join("~") }}'
-      args:
-        executable: /bin/bash
+    - name: add group role assignment to command-list
+      lineinfile:
+        path: /tmp/__cocopharma_users_command_list.x
+        regexp: ^-assign_group_roles '{{ item.id }}
+        line: -assign_group_roles '{{ item.id }}${{ item.roles | join("~") }}'
+        state: present
+        insertafter: EOF
       with_items: "{{ ibm_infosvr_samples_cocopharma_groups }}"
       when: ibm_infosvr_samples_cocopharma_groups is defined
       loop_control:
@@ -337,35 +331,46 @@
       when: ibm_infosvr_samples_cocopharma_groups is defined
       register: __cocopharma_existing_users
 
-    - name: create users
-      shell: >
-          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
-          -user {{ ibm_infosvr_users.isadmin }}
-          -password {{ ibm_infosvr_upwds.isadmin }}
-          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
-          -add_user '{{ item.username }}~{{ item.password }}~{{ item.firstname }}~{{ item.lastname }}~{{ item.title }}~{{ item.jobtitle }}~~~~~~~~{{ item.email }}'
-      args:
-        executable: /bin/bash
+    - name: add users to command-list
+      lineinfile:
+        path: /tmp/__cocopharma_users_command_list.x
+        regexp: ^-add_user '{{ item.username }}
+        line: -add_user '{{ item.username }}~{{ item.password }}~{{ item.firstname }}~{{ item.lastname }}~{{ item.title }}~{{ item.jobtitle }}~~~~~~~~{{ item.email }}'
+        state: present
+        insertafter: EOF
+      with_items: "{{ ibm_infosvr_samples_cocopharma_users }}"
       when: >
         __cocopharma_existing_users is defined
         and __cocopharma_existing_users.stdout.find(item.username) == -1
-      with_items: "{{ ibm_infosvr_samples_cocopharma_users }}"
       loop_control:
         label: "{{ item.username }}"
 
-    - name: assign users to groups
-      shell: >
-          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
-          -user {{ ibm_infosvr_users.isadmin }}
-          -password {{ ibm_infosvr_upwds.isadmin }}
-          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
-          -add_users_group '{{ item.username }}${{ item.groups | join("~") }}'
-      args:
-        executable: /bin/bash
+    - name: add group assignment to command-list
+      lineinfile:
+        path: /tmp/__cocopharma_users_command_list.x
+        regexp: ^-add_users_group '{{ item.username }}
+        line: -add_users_group '{{ item.username }}${{ item.groups | join("~") }}'
+        state: present
+        insertafter: EOF
       with_items: "{{ ibm_infosvr_samples_cocopharma_users }}"
       when: ibm_infosvr_samples_cocopharma_users is defined
       loop_control:
         label: "{{ item.username }}"
+
+    - name: create groups and users
+      shell: >
+          {{ ibm_infosvr_locations.linux }}/ASBNode/bin/DirectoryCommand.sh
+          -user {{ ibm_infosvr_users.isadmin }}
+          -password {{ ibm_infosvr_upwds.isadmin }}
+          -url https://{{ ibm_infosvr_hosts.domain }}:{{ ibm_infosvr_ports_ext.console }}
+          -f /tmp/__cocopharma_users_command_list.x
+      args:
+        executable: /bin/bash
+
+    - name: remove command-list
+      file:
+        path: /tmp/__cocopharma_users_command_list.x
+        state: absent
 
     - name: get RIDs for users
       uri:
