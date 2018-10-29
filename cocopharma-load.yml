@@ -273,19 +273,6 @@
       loop_control:
         label: "{{ item.id }}"
 
-    - name: add group role reset to command-list
-      lineinfile:
-        path: /tmp/__cocopharma_users_command_list.x
-        regexp: ^-remove_group_roles {{ item.id }}
-        line: -remove_group_roles {{ item.id }}${{ ibm_infosvr_roles | json_query('[].id') | join("~") }};
-        state: present
-        insertafter: EOF
-        create: yes
-      with_items: "{{ ibm_infosvr_samples_cocopharma_groups }}"
-      when: ibm_infosvr_samples_cocopharma_groups is defined
-      loop_control:
-        label: "{{ item.id }}"
-
     - name: add group role assignment to command-list
       lineinfile:
         path: /tmp/__cocopharma_users_command_list.x
