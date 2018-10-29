@@ -33,7 +33,7 @@
         verbosity: 1
     - import_role: name=IBM.infosvr-metadata-asset-manager
       vars:
-        ibm_infosvr_metadata_asset_mgr_import_areas:
+        import_areas:
           - name: InfoSvr_Views
             type: DB2Connector
             description: "Import area for Information Server SQL views"
@@ -56,7 +56,7 @@
 
     - import_role: name=IBM.infosvr-metadata-asset-manager
       vars:
-        ibm_infosvr_metadata_asset_mgr_import_areas:
+        import_areas:
           - name: InfoSvr_Views
             type: DB2Connector
             description: "Import area for Information Server SQL views"

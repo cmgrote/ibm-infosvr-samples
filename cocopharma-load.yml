@@ -145,7 +145,7 @@
 
     - import_role: name=IBM.infosvr-metadata-asset-manager
       vars:
-        ibm_infosvr_metadata_asset_mgr_import_areas:
+        import_areas:
           - name: CocoPharma_SampleFiles
             type: LocalFileConnector
             description: "Loads metadata for CocoPharma sample files"
@@ -383,7 +383,7 @@
   vars_files:
     - vars/cocopharma.yml
   vars:
-    ibm_infosvr_metadata_asset_mgr_discover_sources:
+    discover_sources:
       - dcn: CocoPharma_DB2
         project: CocoPharma
         target_host: "{{ groups['ibm-information-server-repo'][0] | upper }}"
