@@ -262,7 +262,7 @@
       lineinfile:
         path: /tmp/__cocopharma_users_command_list.x
         regexp: ^-add_group {{ item.id }}
-        line: -add_group {{ item.id }}~{{ item.name }}
+        line: -add_group {{ item.id }}~{{ item.name }}\r
         state: present
         insertafter: EOF
         create: yes
@@ -277,7 +277,7 @@
       lineinfile:
         path: /tmp/__cocopharma_users_command_list.x
         regexp: ^-remove_group_roles {{ item.id }}
-        line: -remove_group_roles {{ item.id }}${{ ibm_infosvr_roles | json_query('[].id') | join("~") }}
+        line: -remove_group_roles {{ item.id }}${{ ibm_infosvr_roles | json_query('[].id') | join("~") }}\r
         state: present
         insertafter: EOF
         create: yes
@@ -290,7 +290,7 @@
       lineinfile:
         path: /tmp/__cocopharma_users_command_list.x
         regexp: ^-assign_group_roles {{ item.id }}
-        line: -assign_group_roles {{ item.id }}${{ item.roles | join("~") }}
+        line: -assign_group_roles {{ item.id }}${{ item.roles | join("~") }}\r
         state: present
         insertafter: EOF
         create: yes
@@ -315,7 +315,7 @@
       lineinfile:
         path: /tmp/__cocopharma_users_command_list.x
         regexp: ^-add_user {{ item.username }}
-        line: -add_user {{ item.username }}~{{ item.password }}~{{ item.firstname }}~{{ item.lastname }}~{{ item.title }}~{{ item.jobtitle }}~~~~~~~~{{ item.email }}
+        line: -add_user {{ item.username }}~{{ item.password }}~{{ item.firstname }}~{{ item.lastname }}~{{ item.title }}~{{ item.jobtitle }}~~~~~~~~{{ item.email }}\r
         state: present
         insertafter: EOF
         create: yes
@@ -330,7 +330,7 @@
       lineinfile:
         path: /tmp/__cocopharma_users_command_list.x
         regexp: ^-add_users_group {{ item.username }}
-        line: -add_users_group {{ item.username }}${{ item.groups | join("~") }}
+        line: -add_users_group {{ item.username }}${{ item.groups | join("~") }}\r
         state: present
         insertafter: EOF
         create: yes
