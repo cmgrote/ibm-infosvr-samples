@@ -214,7 +214,7 @@
             - number_of: term
               meeting_all_conditions:
                 - { property: "parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
-              is: 51
+              is: 50
             - number_of: database_column
               meeting_all_conditions:
                 - { property: "database_table_or_view.database_schema.database.name", operator: "=", value: "{{ ibm_infosvr_samples_cocopharma_targets.db_name | upper }}" }
