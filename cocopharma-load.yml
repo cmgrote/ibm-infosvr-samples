@@ -210,7 +210,7 @@
             - number_of: category
               meeting_any_conditions:
                 - { property: "parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
-              is: 2
+              is: 3
             - number_of: term
               meeting_all_conditions:
                 - { property: "parent_category.parent_category.name", operator: "=", value: "Coco Pharmaceuticals" }
