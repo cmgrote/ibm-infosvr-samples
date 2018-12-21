@@ -38,6 +38,7 @@
               including_objects:
                 - type: category
                 - type: term
+                - type: information_governance_policy
           relationships:
             - into: "{{ ibm_infosvr_samples_cocopharma_media }}/dbcol2term.json"
               from_type: database_column
